@@ -1,0 +1,36 @@
+services:
+  axon-server:
+    image: axoniq/axonserver:latest
+    hostname: axon-server
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+    environment:
+      - AXONSERVER_HOSTNAME=axon-server
+    volumes:
+      - axon-data:/data
+      - axon-events:/eventdata
+    networks:
+      - axon-network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: accountdb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks:
+      - axon-network
+
+volumes:
+  axon-data:
+  axon-events:
+  postgres-data:
+
+networks:
+  axon-network:
+    driver: bridge
